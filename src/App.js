@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import firebase from 'firebase'
 import { View, Button } from 'react-native'
-import { Header } from './components/common'
+import { Header, Spinner } from './components/common'
 import { config } from '../firebaseConfig'
 import LoginForm from './components/LoginForm'
 
@@ -10,7 +10,7 @@ class App extends Component {
     super(props)
 
     this.state = {
-      loggedIn: false,
+      loggedIn: null,
     }
 
     firebase.initializeApp(config)
@@ -28,11 +28,14 @@ class App extends Component {
   }
 
   renderContent() {
-    if (this.state.loggedIn) {
-      return <Button title="Log out" />
+    switch (this.state.loggedIn) {
+      case true:
+        return <Button title="Log out" />
+      case false:
+        return <LoginForm />
+      default:
+        return <Spinner size="large" />
     }
-
-    return <LoginForm />
   }
 
   render() {
